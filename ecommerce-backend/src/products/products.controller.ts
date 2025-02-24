@@ -36,27 +36,91 @@
 //     return this.productsService.deleteProduct(productId);
 //   }
 // }
+// import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
+// import { ProductsService } from './products.service';
+// import { Product } from './product.schema';
+// import { AuthGuard } from '@nestjs/passport';
+// import { RolesGuard } from '../auth/roles.guard';
+// import { Roles } from '../auth/roles.decorator';
+// import { Role } from 'src/auth/roles.enum';
+
+// @Controller('products')
+// export class ProductsController {
+//   constructor(private readonly productsService: ProductsService) {}
+
+//   // ✅ Get All Active Products
+//   @Get()
+//   getAllProducts(): Promise<Product[]> {
+//     return this.productsService.getAllProducts();
+//   }
+
+//   // ✅ Get Product by ID
+//   @Get(':id')
+//   getProductById(@Param('id') productId: string): Promise<Product> {
+//     return this.productsService.getProductById(productId);
+//   }
+
+//   // ✅ Add New Product (Admin Only)
+//   @Post()
+//   @UseGuards(AuthGuard(), RolesGuard)
+//   @Roles(Role.Admin)
+//   createProduct(@Body() productData: any): Promise<Product> {
+//     return this.productsService.createProduct(productData);
+//   }
+
+//   // ✅ Update Product (Admin Only)
+//   @Put(':id')
+//   @UseGuards(AuthGuard(), RolesGuard)
+//   @Roles(Role.Admin)
+//   updateProduct(@Param('id') productId: string, @Body() updateData: any): Promise<Product> {
+//     return this.productsService.updateProduct(productId, updateData);
+//   }
+
+//   // ✅ Soft Delete Product (Admin Only)
+//   @Delete(':id')
+//   @UseGuards(AuthGuard(), RolesGuard)
+//   @Roles(Role.Admin)
+//   softDeleteProduct(@Param('id') productId: string): Promise<{ message: string }> {
+//     return this.productsService.softDeleteProduct(productId);
+//   }
+
+//   // ✅ Restore Soft Deleted Product (Admin Only)
+//   @Put('restore/:id')
+//   @UseGuards(AuthGuard(), RolesGuard)
+//   @Roles(Role.Admin)
+//   restoreProduct(@Param('id') productId: string): Promise<Product> {
+//     return this.productsService.restoreProduct(productId);
+//   }
+
+//   // ✅ Permanently Delete Product (Admin Only)
+//   @Delete('permanent/:id')
+//   @UseGuards(AuthGuard(), RolesGuard)
+//   @Roles(Role.Admin)
+//   deleteProductPermanently(@Param('id') productId: string): Promise<{ message: string }> {
+//     return this.productsService.deleteProductPermanently(productId);
+//   }
+// }
 import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Product } from './product.schema';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
-import { Role } from 'src/auth/roles.enum';
+import { Role } from '../auth/roles.enum';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
-  // ✅ Get All Active Products
+  // ✅ Get All Active Products (Exclude Soft Deleted)
   @Get()
-  getAllProducts(): Promise<Product[]> {
+  async getAllProducts(): Promise<Product[] | unknown> {
     return this.productsService.getAllProducts();
   }
 
-  // ✅ Get Product by ID
+  // ✅ Get Product by ID (Exclude Soft Deleted)
   @Get(':id')
-  getProductById(@Param('id') productId: string): Promise<Product> {
+  async getProductById(@Param('id') productId: string): Promise<Product | null> {
     return this.productsService.getProductById(productId);
   }
 
@@ -64,7 +128,7 @@ export class ProductsController {
   @Post()
   @UseGuards(AuthGuard(), RolesGuard)
   @Roles(Role.Admin)
-  createProduct(@Body() productData: any): Promise<Product> {
+  async createProduct(@Body() productData: any): Promise<Product> {
     return this.productsService.createProduct(productData);
   }
 
@@ -72,7 +136,7 @@ export class ProductsController {
   @Put(':id')
   @UseGuards(AuthGuard(), RolesGuard)
   @Roles(Role.Admin)
-  updateProduct(@Param('id') productId: string, @Body() updateData: any): Promise<Product> {
+  async updateProduct(@Param('id') productId: string, @Body() updateData: any): Promise<Product | null> {
     return this.productsService.updateProduct(productId, updateData);
   }
 
@@ -80,7 +144,7 @@ export class ProductsController {
   @Delete(':id')
   @UseGuards(AuthGuard(), RolesGuard)
   @Roles(Role.Admin)
-  softDeleteProduct(@Param('id') productId: string): Promise<{ message: string }> {
+  async softDeleteProduct(@Param('id') productId: string): Promise<{ message: string }> {
     return this.productsService.softDeleteProduct(productId);
   }
 
@@ -88,7 +152,7 @@ export class ProductsController {
   @Put('restore/:id')
   @UseGuards(AuthGuard(), RolesGuard)
   @Roles(Role.Admin)
-  restoreProduct(@Param('id') productId: string): Promise<Product> {
+  async restoreProduct(@Param('id') productId: string): Promise<Product | null> {
     return this.productsService.restoreProduct(productId);
   }
 
@@ -96,8 +160,9 @@ export class ProductsController {
   @Delete('permanent/:id')
   @UseGuards(AuthGuard(), RolesGuard)
   @Roles(Role.Admin)
-  deleteProductPermanently(@Param('id') productId: string): Promise<{ message: string }> {
+  async deleteProductPermanently(@Param('id') productId: string): Promise<{ message: string }> {
     return this.productsService.deleteProductPermanently(productId);
   }
 }
+
 
