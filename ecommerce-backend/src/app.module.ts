@@ -7,13 +7,18 @@ import { AppService } from './app.service';
 import { ProductsController } from './products/products.controller';
 import { ProductsService } from './products/products.service';
 import { ProductsModule } from './products/products.module';
+import { ConfigModule } from '@nestjs/config';
+import { PassportModule } from '@nestjs/passport';
 // import { OrdersService } from './orders/orders.service';
 // import { OrdersController } from './orders/orders.controller';
 // import { OrdersModule } from './orders/orders.module';
 
+
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost:27017'), // Update later for online MongoDB
+    ConfigModule.forRoot({ isGlobal: true }),
+     PassportModule.register({ defaultStrategy: 'jwt' }),
+    MongooseModule.forRoot('mongodb://localhost:27017/ecommerce'), // Update later for online MongoDB
     AuthModule,
     UsersModule,
     ProductsModule,

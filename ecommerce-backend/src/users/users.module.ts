@@ -3,9 +3,9 @@ import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './user.schema';
-
+import { PassportModule } from '@nestjs/passport';
 @Module({
-  imports: [MongooseModule.forFeature([{ name: User.name, schema: UserSchema }])],
+  imports: [PassportModule , MongooseModule.forFeature([{ name: User.name, schema: UserSchema }])],
   providers: [UsersService],
   controllers: [UsersController],
   exports: [UsersService,MongooseModule],

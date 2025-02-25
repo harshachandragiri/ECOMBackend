@@ -11,33 +11,17 @@ export class UsersService {
     return this.userModel.create(userDto);
   }
 
-  // async findOne(email: string): Promise<User | null> {
-  //   return this.userModel.findOne({ email }).exec();
-  // }
-  // async findOne(email: string): Promise<any> {
-  //   const user = await this.userModel.findOne({ email }).select("+role").exec();
-  //   console.log("Fetched User Data from DB:", user); // Debugging
-  //   return user;
-  // }
-  // async findOne(email: string): Promise<any> {
-  //   const user = await this.userModel.findOne({ email }).select("email password role").exec();
-  //   console.log("Fetched User Data from DB:", user); // Debugging
-  //   return user;
-  // }
-  
-  
-  
-
   async findOne(email: string): Promise<any> {
-    console.log(email);
-    const user = await this.userModel.findOne({ email }).exec();
-    console.log("Fetched User Data from DB:", user); // Debugging
+    console.log("Searching for user with email:", email);
+    const user = await this.userModel.findOne({email});
+    if(!user){
+      console.log("user Not found in user service");
+    }
+    console.log("✅ Fetched User Data from DB:", user);
     return user;
   }
-  
 
   async findById(id: string): Promise<User | null> {
     return this.userModel.findById(id).exec();
   }
-  
 }
